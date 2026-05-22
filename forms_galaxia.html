@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORMS CLIENTES GALAXIA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F3EF;
+    --card: #FFFFFF;
+    --accent: #1A1A2E;
+    --accent2: #E63946;
+    --accent3: #2563EB;
+    --text: #1A1A2E;
+    --text2: #6B6B80;
+    --border: #E2E0DA;
+    --input-bg: #FAFAF8;
+    --locked: #F0F0F0;
+    --locked-text: #888;
+    --success: #16A34A;
+    --tag-bg: #EEF2FF;
+    --tag-text: #3730A3;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(26,26,46,0.07);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .header {
+    background: var(--accent);
+    color: white;
+    padding: 2rem 2.5rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(230,57,70,0.15);
+  }
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .header p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    max-width: 540px;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent2);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .form-body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .section {
+    display: none;
+  }
+  .section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .field {
+    margin-bottom: 1.2rem;
+  }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  label .req {
+    color: var(--accent2);
+    margin-left: 2px;
+  }
+  label .hint {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #9CA3AF;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 0.6rem 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent3);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  }
+  input.locked, select.locked, textarea.locked {
+    background: var(--locked);
+    color: var(--locked-text);
+    cursor: not-allowed;
+    border-color: #E5E5E5;
+    font-weight: 500;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .radio-group, .check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .radio-group.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .radio-opt, .check-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    background: var(--input-bg);
+    transition: all 0.15s;
+    font-size: 0.9rem;
+  }
+  .radio-opt:hover, .check-opt:hover {
+    border-color: var(--accent3);
+    background: #EFF6FF;
+  }
+  .radio-opt.selected, .check-opt.selected {
+    border-color: var(--accent3);
+    background: #EFF6FF;
+    color: var(--accent3);
+    font-weight: 500;
+  }
+  .radio-opt input, .check-opt input {
+    width: 16px; height: 16px;
+    accent-color: var(--accent3);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .result-box {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin: 1rem 0;
+    display: none;
+    align-items: center;
+    gap: 14px;
+  }
+  .result-box.show, .result-box[style*="flex"] {
+    display: flex !important;
+  }
+  .result-box .icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .result-box .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 3px;
+  }
+  .result-box .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    letter-spacing: 0.02em;
+  }
+  .result-box .sublabel {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  .locked-field-wrap {
+    position: relative;
+  }
+  .lock-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--locked-text);
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    justify-content: space-between;
+  }
+  .btn {
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #2d2d4e; }
+  .btn-secondary {
+    background: white;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--bg); }
+  .btn-danger {
+    background: var(--accent2);
+    color: white;
+  }
+  .btn-danger:hover { background: #c1121f; }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .info-box {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 7px;
+    padding: 0.75rem 1rem;
+    font-size: 0.83rem;
+    color: #1D4ED8;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .warn-box {
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    border-radius: 7px;
+    padding: 0.75rem 1rem;
+    font-size: 0.83rem;
+    color: #C2410C;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .success-screen {
+    text-align: center;
+    padding: 3rem 1rem;
+    display: none;
+  }
+  .success-screen.show { display: block; animation: fadeIn 0.4s ease; }
+  .success-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+  .success-screen h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .success-screen p {
+    color: var(--text2);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    font-size: 0.88rem;
+    line-height: 1.9;
+  }
+  .summary-card strong {
+    color: var(--text2);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 0.5rem;
+  }
+  .summary-card span {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .tree-path {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+  .tree-step {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-weight: 500;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 500px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .radio-group.horizontal { flex-direction: column; }
+  }
+
+  /* Subcanal ON sub-questions */
+  .sub-q {
+    display: none;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+  }
+  .sub-q.show { display: block; animation: fadeIn 0.25s ease; }
+
+  .badge-canal {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-on { background: #FEE2E2; color: #991B1B; }
+  .badge-off { background: #DCFCE7; color: #166534; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Galaxia · Gestión comercial</div>
+  <h1>Forms Clientes</h1>
+  <p>Altas · Bajas · Potenciales · Activos · Cambio razón social</p>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="form-body">
+
+  <!-- ============================================================ -->
+  <!-- S0: DATOS INICIALES -->
+  <!-- ============================================================ -->
+  <div class="section active" id="s0">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Datos del vendedor</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Nombre del vendedor <span class="req">*</span><span class="hint">Si sos backup, seleccioná tu nombre</span></label>
+        <select id="f_vendedor">
+          <option value="">— Seleccioná tu nombre —</option>
+          <option>NO LO SÉ</option>
+          <option>ACEVEDO MARIA EUGENIA</option>
+          <option>ALTAMIRANO BAHAMONDES TOMAS</option>
+          <option>ALVAREZ TOMAS</option>
+          <option>ARAVENA CRISTIAN ADRIÁN</option>
+          <option>BOCEK MILENA</option>
+          <option>CORSINO PEDRO</option>
+          <option>DALLEVA SALINAS ALEXIS</option>
+          <option>FIGUEROA JONATHAN</option>
+          <option>GOMEZ RAUL ALEJANDRO</option>
+          <option>KEBERLEIN ARIANA</option>
+          <option>LEON ABRIL CANDELA</option>
+          <option>MARQUEZ JOAQUIN</option>
+          <option>MELINAO LUCAS</option>
+          <option>MILLAIN BETIANA</option>
+          <option>MORA MATIAS ARIEL</option>
+          <option>MORA MAURO</option>
+          <option>MORENO FERNANDO</option>
+          <option>MUÑOZ DAMIAN</option>
+          <option>NUÑEZ MAURO</option>
+          <option>OLEA LUCAS</option>
+          <option>RODRIGO D´URSO PAEZ</option>
+          <option>ROMANI JOAQUIN</option>
+          <option>SECO ROBERTO ENRIQUE</option>
+          <option>VIQUEIRA MARTIN</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Número de contacto del cliente <span class="req">*</span></label>
+          <input type="tel" id="f_contacto" placeholder="Ej: 2994123456">
+        </div>
+        <div class="field">
+          <label>Horario de atención <span class="req">*</span></label>
+          <input type="text" id="f_horario" placeholder="Ej: Lun-Vie 9 a 18hs">
+        </div>
+      </div>
+      <div class="field">
+        <label>¿Vende bebidas alcohólicas? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_alcohol">
+          <label class="radio-opt"><input type="radio" name="alcohol" value="si"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="alcohol" value="no"> No</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>¿Puede recibir de tarde (segunda vuelta)? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_segundavuelta">
+          <label class="radio-opt"><input type="radio" name="segundavuelta" value="si"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="segundavuelta" value="no"> No</label>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Objetivo del formulario <span class="req">*</span></label>
+        <div class="radio-group" id="rg_objetivo">
+          <label class="radio-opt"><input type="radio" name="objetivo" value="alta"> Alta de cliente</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="baja"> Baja de cliente</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="potencial"> Cliente potencial</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="activo"> Comentario cliente activo</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="razonsocial"> Cambio razón social</label>
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" onclick="goNext('s0')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_ALTA_1: DATOS BÁSICOS DEL CLIENTE -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_alta1">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Datos del cliente</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>¿Fue cliente anteriormente? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_excliente">
+          <label class="radio-opt"><input type="radio" name="excliente" value="si"> Sí (cliente anulado)</label>
+          <label class="radio-opt"><input type="radio" name="excliente" value="no"> No</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tipo de contribuyente <span class="req">*</span></label>
+        <div class="radio-group" id="rg_contribuyente">
+          <label class="radio-opt"><input type="radio" name="contribuyente" value="monotributo"> Monotributo</label>
+          <label class="radio-opt"><input type="radio" name="contribuyente" value="ri"> Responsable Inscripto</label>
+          <label class="radio-opt"><input type="radio" name="contribuyente" value="cf"> Consumidor Final</label>
+          <label class="radio-opt"><input type="radio" name="contribuyente" value="otro"> Otro</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>CUIT / DNI <span class="req">*</span><span class="hint">MT/RI → CUIT · CF → DNI</span></label>
+          <input type="text" id="f_cuit" placeholder="Ej: 20123456780">
+        </div>
+        <div class="field">
+          <label>Razón social <span class="req">*</span><span class="hint">Tal cual aparece en ARCA/AFIP</span></label>
+          <input type="text" id="f_razonsocial" placeholder="Razón social exacta">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Nombre de fantasía</label>
+          <input type="text" id="f_fantasia" placeholder="Nombre comercial (opcional)">
+        </div>
+        <div class="field">
+          <label>Localidad <span class="req">*</span></label>
+          <input type="text" id="f_localidad" placeholder="Ej: Neuquén Capital">
+        </div>
+      </div>
+      <div class="field">
+        <label>Domicilio <span class="req">*</span></label>
+        <div class="warn-box">⚠️ No mandar "Manzana X casa X" porque resulta IMPOSIBLE de encontrar. Completá con la ubicación que da Google Maps. Cualquier duda escribí al 2994527983.</div>
+        <input type="text" id="f_domicilio" placeholder="Calle, número o ubicación Google Maps">
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_alta1')">← Volver</button>
+      <button class="btn btn-primary" onclick="goNext('s_alta1')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_CANAL: ON o OFF -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_canal">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Canal — consumo en el local</span>
+    </div>
+    <div class="card">
+      <div class="info-box">Esta pregunta determina qué árbol de decisión se usa para clasificar el punto de venta.</div>
+      <div class="field">
+        <label>¿Las bebidas se consumen <strong>dentro</strong> de las instalaciones del comercio? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_canal">
+          <label class="radio-opt"><input type="radio" name="canal" value="on"> Sí → Canal ON</label>
+          <label class="radio-opt"><input type="radio" name="canal" value="off"> No → Canal OFF</label>
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_canal')">← Volver</button>
+      <button class="btn btn-primary" onclick="goNext('s_canal')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_OFF: ÁRBOL OFF COMPLETO -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_off">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Árbol de decisión — Canal OFF</span>
+      <span class="badge-canal badge-off">OFF</span>
+    </div>
+
+    <!-- PASO OFF-1: Principal comprador -->
+    <div class="card" id="off_p1">
+      <div class="field">
+        <label>¿Cuál es el principal comprador de bebidas de este PDV? <span class="req">*</span></label>
+        <div class="radio-group" id="rg_comprador">
+          <label class="radio-opt"><input type="radio" name="comprador" value="otros_y_cf" onchange="offStep1()"> Otros comercios y consumidores finales</label>
+          <label class="radio-opt"><input type="radio" name="comprador" value="cf" onchange="offStep1()"> Solo consumidores finales</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-2a: Mayorista (si comprador = otros comercios) -->
+    <div class="card sub-q" id="off_mayorista">
+      <div class="field">
+        <label>¿Cuenta con salón de ventas al público? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_salon">
+          <label class="radio-opt"><input type="radio" name="salon" value="si" onchange="offStepMayorista()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="salon" value="no" onchange="offStepMayorista()"> No</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-2b: Productos esenciales (si CF) -->
+    <div class="card sub-q" id="off_esenciales">
+      <div class="field">
+        <label>¿Principalmente vende productos esenciales (aceite, fideos, conservas, cereales)? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_esenciales">
+          <label class="radio-opt"><input type="radio" name="esenciales" value="si" onchange="offStep2b()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="esenciales" value="no" onchange="offStep2b()"> No</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-3: Cereales / dietética -->
+    <div class="card sub-q" id="off_cereales">
+      <div class="field">
+        <label>¿Principalmente vende cereales, productos naturales, dietéticos, saludables u orgánicos? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_cereales">
+          <label class="radio-opt"><input type="radio" name="cereales" value="si" onchange="offStep3()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="cereales" value="no" onchange="offStep3()"> No</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-4: Distribución del local (almacén) -->
+    <div class="card sub-q" id="off_local">
+      <div class="field">
+        <label>¿Se puede ingresar al PDV? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_ingreso">
+          <label class="radio-opt"><input type="radio" name="ingreso" value="si" onchange="offStep4()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="ingreso" value="no" onchange="offStep4()"> No</label>
+        </div>
+      </div>
+      <div class="sub-q" id="off_local_tipo">
+        <div class="field">
+          <label>Indique la opción que más se ajusta al PDV <span class="req">*</span></label>
+          <div class="radio-group" id="rg_tipolocal">
+            <label class="radio-opt"><input type="radio" name="tipolocal" value="almacen" onchange="offSetSubcanalLocal()"> No tiene pasillos</label>
+            <label class="radio-opt"><input type="radio" name="tipolocal" value="almacen_autoservice" onchange="offSetSubcanalLocal()"> Tiene al menos un pasillo, pero sin línea de caja</label>
+            <label class="radio-opt"><input type="radio" name="tipolocal" value="autoservice" onchange="offSetSubcanalLocal()"> Tiene línea de caja en entrada/salida</label>
+            <label class="radio-opt"><input type="radio" name="tipolocal" value="almacen_autoservice_virtual" onchange="offSetSubcanalLocal()"> Solo vende por internet/teléfono</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-5: Golosinas / combustible -->
+    <div class="card sub-q" id="off_golosinas">
+      <div class="field">
+        <label>¿Principalmente vende gran variedad de golosinas y cigarrillos, o algún tipo de combustible? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_golosinas">
+          <label class="radio-opt"><input type="radio" name="golosinas" value="si" onchange="offStep5()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="golosinas" value="no" onchange="offStep5()"> No</label>
+        </div>
+      </div>
+      <div class="sub-q" id="off_golosinas_tipo">
+        <div class="field">
+          <label>Indique qué opción describe mejor al PDV <span class="req">*</span></label>
+          <div class="radio-group" id="rg_tipogolosinas">
+            <label class="radio-opt"><input type="radio" name="tipogolosinas" value="estacion_servicio" onchange="offSetSubcanalGolosinas()"> Venden algún tipo de combustible</label>
+            <label class="radio-opt"><input type="radio" name="tipogolosinas" value="kiosco_tipo" onchange="offSetSubcanalGolosinas()"> Principalmente vende golosinas y cigarrillos</label>
+          </div>
+        </div>
+        <div class="sub-q" id="off_kiosco_tipo">
+          <div class="field">
+            <label>¿Se puede ingresar al PDV? <span class="req">*</span></label>
+            <div class="radio-group horizontal" id="rg_kioscoingreso">
+              <label class="radio-opt"><input type="radio" name="kioscoingreso" value="si" onchange="offSetSubcanalKiosco()"> Sí</label>
+              <label class="radio-opt"><input type="radio" name="kioscoingreso" value="no" onchange="offSetSubcanalKiosco()"> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-6: Bebidas (sección B) -->
+    <div class="card sub-q" id="off_bebidas">
+      <div class="field">
+        <label>¿Principalmente vende bebidas? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_bebidas">
+          <label class="radio-opt"><input type="radio" name="bebidas" value="si" onchange="offStep6()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="bebidas" value="no" onchange="offStep6()"> No</label>
+        </div>
+      </div>
+      <div class="sub-q" id="off_bebidas_tipo">
+        <div class="field">
+          <label>Indique la opción que representa al PDV <span class="req">*</span></label>
+          <div class="radio-group" id="rg_tipobebidas">
+            <label class="radio-opt"><input type="radio" name="tipobebidas" value="vinoteca" onchange="offSetSubcanalBebidas()"> Más del 50% de su exhibición son vinos</label>
+            <label class="radio-opt"><input type="radio" name="tipobebidas" value="tienda_bebidas" onchange="offSetSubcanalBebidas()"> Tiene al menos un pasillo pero sin línea de caja</label>
+            <label class="radio-opt"><input type="radio" name="tipobebidas" value="deposito_tienda_virtual" onchange="offSetSubcanalBebidas()"> Tiene línea de caja en entrada/salida</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-7: Frescos -->
+    <div class="card sub-q" id="off_frescos">
+      <div class="field">
+        <label>¿Principalmente vende productos frescos/crudos (verduras, carnes, pescados, pastas, fiambres)? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_frescos">
+          <label class="radio-opt"><input type="radio" name="frescos" value="si" onchange="offStep7()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="frescos" value="no" onchange="offStep7()"> No</label>
+        </div>
+      </div>
+      <div class="sub-q" id="off_frescos_tipo">
+        <div class="field">
+          <label>Indique la opción que describe al PDV <span class="req">*</span></label>
+          <div class="radio-group" id="rg_tipofrescos">
+            <label class="radio-opt"><input type="radio" name="tipofrescos" value="verduleria" onchange="offSetSubcanalFrescos()"> Principalmente vende verduras</label>
+            <label class="radio-opt"><input type="radio" name="tipofrescos" value="carniceria" onchange="offSetSubcanalFrescos()"> Principalmente vende carnes rojas y/o pollo crudo</label>
+            <label class="radio-opt"><input type="radio" name="tipofrescos" value="pescaderia" onchange="offSetSubcanalFrescos()"> Principalmente vende pescado por kilo</label>
+            <label class="radio-opt"><input type="radio" name="tipofrescos" value="fiambreria" onchange="offSetSubcanalFrescos()"> Principalmente vende quesos frescos y/o fiambres</label>
+            <label class="radio-opt"><input type="radio" name="tipofrescos" value="casa_pastas" onchange="offSetSubcanalFrescos()"> Principalmente vende pastas frescas por kilo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-8: Elaborados -->
+    <div class="card sub-q" id="off_elaborados">
+      <div class="field">
+        <label>¿Principalmente vende alimentos elaborados/listos para consumir o pan, facturas y tortas? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_elaborados">
+          <label class="radio-opt"><input type="radio" name="elaborados" value="si" onchange="offStep8()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="elaborados" value="no" onchange="offStep8()"> No</label>
+        </div>
+      </div>
+      <div class="sub-q" id="off_elaborados_tipo">
+        <div class="field">
+          <label>Indique la opción que describe al PDV <span class="req">*</span></label>
+          <div class="radio-group" id="rg_tipoelaborados">
+            <label class="radio-opt"><input type="radio" name="tipoelaborados" value="rotiseria" onchange="offSetSubcanalElaborados()"> Principalmente vende comidas listas para consumir</label>
+            <label class="radio-opt"><input type="radio" name="tipoelaborados" value="panaderia" onchange="offSetSubcanalElaborados()"> Principalmente vende facturas, pan y/o tortas</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO OFF-9: Medicamentos -->
+    <div class="card sub-q" id="off_medicamentos">
+      <div class="field">
+        <label>¿El PDV vende medicamentos bajo receta y/o artículos de perfumería? <span class="req">*</span></label>
+        <div class="radio-group horizontal" id="rg_medicamentos">
+          <label class="radio-opt"><input type="radio" name="medicamentos" value="si" onchange="offSetSubcanalMedicamentos('FARMACIA/PERFUMERÍA')"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="medicamentos" value="no" onchange="offStep9noMatch()"> No</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADO OFF -->
+    <div id="off_resultado" style="display:none;">
+      <div class="result-box">
+        <div class="icon">🏪</div>
+        <div>
+          <div class="label">Subcanal OFF detectado</div>
+          <div class="value" id="off_subcanal_display">—</div>
+          <div class="sublabel">Este campo se completará automáticamente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_off')">← Volver</button>
+      <button class="btn btn-primary" id="btn_off_next" onclick="goNext('s_off')" disabled>Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_ON: ÁRBOL ON — lógica exacta del árbol de decisión       -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_on">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Árbol de decisión — Canal ON</span>
+      <span class="badge-canal badge-on">ON</span>
+    </div>
+
+    <div class="card">
+      <div class="info-box">Respondé cada pregunta. El subcanal se determinará automáticamente según tus respuestas.</div>
+
+      <!-- P1: Nocturno — primera pregunta del árbol ON -->
+      <div class="field">
+        <label>¿La ocasión principal de consumo ocurre en horario nocturno? <span class="req">*</span></label>
+        <div class="radio-group horizontal">
+          <label class="radio-opt"><input type="radio" name="on_nocturno" value="si" onchange="on_nocturno()"> Sí</label>
+          <label class="radio-opt"><input type="radio" name="on_nocturno" value="no" onchange="on_nocturno()"> No</label>
+        </div>
+      </div>
+
+      <!-- P_MAYORISTA: ¿mayorista ON? (rama de no-nocturno/no-gastro/no-actividad) -->
+      <div class="sub-q" id="on_p_mayorista">
+        <div class="field">
+          <label>¿El PDV vende bebidas al por mayor? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_mayorista" value="si" onchange="on_mayorista()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_mayorista" value="no" onchange="on_mayorista()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOCTURNO=SI → música/baile? -->
+      <div class="sub-q" id="on_p_baile">
+        <div class="field">
+          <label>En esta ocasión nocturna, ¿el consumo está centrado en música, baile o show en vivo? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_baile" value="si" onchange="on_baile()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_baile" value="no" onchange="on_baile()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- baile=NO → es bar? -->
+      <div class="sub-q" id="on_p_bar">
+        <div class="field">
+          <label>¿El PDV es un bar donde la bebida es el driver principal? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_bar" value="si" onchange="on_bar()"> Sí</label>
+          </div>
+        </div>
+        <div id="on_aviso_nocturno" style="display:none;margin-top:1rem;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:0.9rem 1rem;font-size:0.88rem;color:#92400E;line-height:1.6;">
+          <strong>⬆️ Si el PDV no es un boliche ni un bar</strong>, significa que probablemente no es un local nocturno.<br>
+          Volvé a la primera pregunta y respondé <strong>"NO"</strong> en <em>"¿La ocasión principal de consumo ocurre en horario nocturno?"</em> para continuar por la rama correcta.
+        </div>
+      </div>
+
+      <!-- NOCTURNO=NO → gastronomía? -->
+      <div class="sub-q" id="on_p_gastro">
+        <div class="field">
+          <label>¿La ocasión principal está vinculada a la comida/gastronomía? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_gastro" value="si" onchange="on_gastro()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_gastro" value="no" onchange="on_gastro()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRO → pizza? -->
+      <div class="sub-q" id="on_p_pizza">
+        <div class="field">
+          <label>¿El foco principal es la pizza? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_pizza" value="si" onchange="on_pizza()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_pizza" value="no" onchange="on_pizza()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRO → hamburguesas? -->
+      <div class="sub-q" id="on_p_hambur">
+        <div class="field">
+          <label>¿El foco principal es hamburguesas o sándwiches? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_hambur" value="si" onchange="on_hambur()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_hambur" value="no" onchange="on_hambur()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRO → café/pastelería? -->
+      <div class="sub-q" id="on_p_cafe">
+        <div class="field">
+          <label>¿El foco principal es café/pastelería (desayuno/merienda)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_cafe" value="si" onchange="on_cafe()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_cafe" value="no" onchange="on_cafe()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRO → restaurante? -->
+      <div class="sub-q" id="on_p_rest">
+        <div class="field">
+          <label>¿Ofrece carta completa o platos elaborados (pastas, carnes, cocina gourmet/regional)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_rest" value="si" onchange="on_rest()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_rest" value="no" onchange="on_rest()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRO → comidas al paso? (rest=NO) -->
+      <div class="sub-q" id="on_p_alpaso">
+        <div class="field">
+          <label>¿Combina comidas simples o formato al paso (menú del día, rotisería, take away)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_alpaso" value="si" onchange="on_alpaso()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_alpaso" value="no" onchange="on_alpaso()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- al paso=NO → cadena global? -->
+      <div class="sub-q" id="on_p_cadglobal">
+        <div class="field">
+          <label>¿Pertenece a una cadena global o franquicia internacional? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_cadglobal" value="si" onchange="on_cadglobal()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_cadglobal" value="no" onchange="on_cadglobal()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- cadena global=NO → cadena local? -->
+      <div class="sub-q" id="on_p_cadlocal">
+        <div class="field">
+          <label>¿Pertenece a una cadena local con más de 5 sucursales en la región? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_cadlocal" value="si" onchange="on_cadlocal()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_cadlocal" value="no" onchange="on_cadlocal()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- NO GASTRO → actividad principal? -->
+      <div class="sub-q" id="on_p_actividad">
+        <div class="field">
+          <label>¿El consumo ocurre como parte de otra actividad principal (deporte, evento, educación, entretenimiento, hospedaje)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_actividad" value="si" onchange="on_actividad()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_actividad" value="no" onchange="on_actividad()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → deporte? -->
+      <div class="sub-q" id="on_p_deporte">
+        <div class="field">
+          <label>¿Está dentro o vinculado a un estadio, club o espacio deportivo? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_deporte" value="si" onchange="on_deporte()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_deporte" value="no" onchange="on_deporte()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → hotel? -->
+      <div class="sub-q" id="on_p_hotel">
+        <div class="field">
+          <label>¿Está vinculado a un hotel (bar/restaurante/rooftop de hotel)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_hotel" value="si" onchange="on_hotel()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_hotel" value="no" onchange="on_hotel()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → casino? (antes que educación) -->
+      <div class="sub-q" id="on_p_casino">
+        <div class="field">
+          <label>¿El consumo ocurre en contexto de apuestas o juegos (casino/bingo)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_casino" value="si" onchange="on_casino()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_casino" value="no" onchange="on_casino()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → educación? -->
+      <div class="sub-q" id="on_p_edu">
+        <div class="field">
+          <label>¿Opera dentro de un espacio educativo o campus universitario? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_edu" value="si" onchange="on_edu()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_edu" value="no" onchange="on_edu()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → eventos? (antes que cultural) -->
+      <div class="sub-q" id="on_p_eventos">
+        <div class="field">
+          <label>¿Funciona como salón/centro de eventos, ferias o fiestas, o es un servicio de catering? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_eventos" value="si" onchange="on_eventos()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_eventos" value="no" onchange="on_eventos()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVIDAD → cultural/recreativo? -->
+      <div class="sub-q" id="on_p_cultural">
+        <div class="field">
+          <label>¿Está en un espacio cultural o recreativo (teatro, museo, parque temático)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_cultural" value="si" onchange="on_cultural()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_cultural" value="no" onchange="on_cultural()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- cultural=NO → shopping? -->
+      <div class="sub-q" id="on_p_shopping">
+        <div class="field">
+          <label>¿Se encuentra dentro de un shopping o complejo comercial? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_shopping" value="si" onchange="on_shopping()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_shopping" value="no" onchange="on_shopping()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- shopping=NO → transporte? -->
+      <div class="sub-q" id="on_p_transporte">
+        <div class="field">
+          <label>¿Se trata de un local en terminal, aeropuerto o estación de tren/micro? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_transporte" value="si" onchange="on_transporte()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_transporte" value="no" onchange="on_transporte()"> No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- transporte=NO → parada en tránsito / estación de servicio -->
+      <div class="sub-q" id="on_p_estserv">
+        <div class="field">
+          <label>¿El consumo está vinculado a una parada en tránsito (estación de servicio, ruta)? <span class="req">*</span></label>
+          <div class="radio-group horizontal">
+            <label class="radio-opt"><input type="radio" name="on_estserv" value="si" onchange="on_estserv()"> Sí</label>
+            <label class="radio-opt"><input type="radio" name="on_estserv" value="no" onchange="on_estserv()"> No</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CLASIFICACIÓN -->
+    <div class="card sub-q" id="on_p_clasif">
+      <div class="field">
+        <label>Clasificación del PDV <span class="req">*</span>
+          <span class="hint">Tipo detectado: <strong id="on_tipo_display" style="color:var(--accent)">—</strong></span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="on_clasif" value="cadena" onchange="on_clasif()"> ¿Tiene ≥5 sucursales en la región o ≥2 interregionales? → <strong>CADENA</strong></label>
+          <label class="radio-opt"><input type="radio" name="on_clasif" value="top" onchange="on_clasif()"> ¿Es TOP? (embajador de marca / presente en polos gastronómicos más importantes del país) → <strong>TOP</strong></label>
+          <label class="radio-opt"><input type="radio" name="on_clasif" value="base" onchange="on_clasif()"> ¿Es BASE? (el consumidor lo elige por precio/cercanía, no tiene imagen desarrollada) → <strong>BASE</strong></label>
+          <label class="radio-opt"><input type="radio" name="on_clasif" value="reg" onchange="on_clasif()"> Ninguna de las anteriores → <strong>REG</strong></label>
+        </div>
+      </div>
+      <div id="on_aviso_gastro" style="display:none;margin-top:1rem;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:0.9rem 1rem;font-size:0.88rem;color:#92400E;line-height:1.6;">
+        <strong>⬆️ Si no encontraste lo que buscabas</strong>, puede que no sea un local gastronómico.<br>
+        Volvé y respondé <strong>"NO"</strong> en <em>"¿La ocasión principal está vinculada a la comida/gastronomía?"</em> para ver más opciones.
+      </div>
+    </div>
+
+    <!-- RESULTADO ON -->
+    <div id="on_resultado" style="display:none;">
+      <div class="result-box">
+        <div class="icon">🍻</div>
+        <div>
+          <div class="label">Subcanal ON detectado</div>
+          <div class="value" id="on_subcanal_display">—</div>
+          <div class="sublabel">Campo bloqueado — determinado por el árbol de decisión</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_on')">← Volver</button>
+      <button class="btn btn-primary" id="btn_on_next" onclick="goNext('s_on')" disabled>Continuar →</button>
+    </div>
+  </div>
+
+    <!-- ============================================================ -->
+  <!-- S_VISITA: DÍAS DE VISITA + SUBCANAL BLOQUEADO -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_visita">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Días de visita y subcanal</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Días de visita <span class="req">*</span></label>
+        <div class="check-group" id="cg_dias" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <label class="check-opt"><input type="checkbox" name="dias" value="Lunes"> Lunes</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Martes"> Martes</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Miércoles"> Miércoles</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Jueves"> Jueves</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Viernes"> Viernes</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Sábado"> Sábado</label>
+          <label class="check-opt"><input type="checkbox" name="dias" value="Domingo"> Domingo</label>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Subcanal del PDV <span class="req">*</span></label>
+        <div class="locked-field-wrap">
+          <input type="text" id="f_subcanal" class="locked" readonly placeholder="Se completa automáticamente según el árbol">
+          <span class="lock-icon">🔒</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;">Este campo está bloqueado. El sistema lo determinó en base a tus respuestas anteriores.</div>
+      </div>
+      <div class="field">
+        <label>¿Qué subcanal te dijo el cliente que era?</label>
+        <select id="f_subcanal_cliente">
+          <option value="">— Seleccionar —</option>
+          <option>MAYORISTA SALÓN</option><option>MAYORISTA DEPÓSITO</option><option>MAYORISTA ON</option>
+          <option>DIETÉTICA</option><option>ALMACÉN</option><option>ALMACÉN AUTOSERVICIO</option>
+          <option>AUTOSERVICIO</option><option>ALMACÉN VENTANA</option><option>ESTACIÓN DE SERVICIO</option>
+          <option>KIOSCO/MAXIKIOSCO</option><option>KIOSCO VENTANA</option><option>VINOTECA</option>
+          <option>TIENDA DE BEBIDAS</option><option>DEPÓSITO TIENDA VIRTUAL</option><option>VERDULERÍA</option>
+          <option>CARNICERÍA/POLLERÍA</option><option>PESCADERÍA</option><option>FIAMBRERÍA/QUESERÍA</option>
+          <option>CASA DE PASTAS</option><option>ROTISERÍA/COMIDA PARA LLEVAR</option>
+          <option>PANADERÍA/PASTELERÍA</option><option>FARMACIA/PERFUMERÍA</option>
+          <option>BAR</option><option>BOLICHE</option><option>RESTAURANTE</option><option>PIZZERÍA</option>
+          <option>HAMBURGUESERÍA</option><option>CAFÉ/CONFITERÍA</option><option>CASINO/JUEGOS</option>
+          <option>HOTEL</option><option>DEPORTE</option><option>EDUCACIÓN</option>
+          <option>EVENTOS</option><option>OTROS ENTRETENIMIENTOS</option><option>OTROS MEALS</option>
+          <option>CADENA TRANSPORTE</option><option>CADENA SHOPPING</option>
+          <option>CADENA GLOBAL</option><option>CADENA LOCAL</option>
+        </select>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_visita')">← Volver</button>
+      <button class="btn btn-primary" onclick="goNext('s_visita')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_FINAL: ARCHIVOS Y COMENTARIOS -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_final">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Cierre del alta</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Comentarios adicionales</label>
+        <textarea id="f_comentario_alta" placeholder="Cualquier dato extra relevante para el alta..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_final')">← Volver</button>
+      <button class="btn btn-danger" onclick="submitForm()">✓ Enviar formulario</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_BAJA -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_baja">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Baja de cliente</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Código de cliente <span class="req">*</span></label>
+        <input type="text" id="f_baja_codigo" placeholder="Código en sistema">
+      </div>
+      <div class="field">
+        <label>Motivo de la baja <span class="req">*</span></label>
+        <textarea id="f_baja_motivo" placeholder="Detallá el motivo..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_baja')">← Volver</button>
+      <button class="btn btn-primary" onclick="goSection('s_seccfinal')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_POTENCIAL -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_potencial">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Cliente potencial</span>
+    </div>
+    <div class="card">
+      <div class="info-box">Usá esta sección para registrar PDVs que podrían convertirse en clientes activos.</div>
+      <div class="field">
+        <label>Nombre del cliente potencial <span class="req">*</span></label>
+        <input type="text" id="f_pot_nombre" placeholder="Nombre o razón social">
+      </div>
+      <div class="field">
+        <label>¿Por qué no se puede dar de alta? <span class="req">*</span></label>
+        <div class="radio-group" id="rg_pot_motivo">
+          <label class="radio-opt"><input type="radio" name="pot_motivo" value="papeles"> Falta de papeles</label>
+          <label class="radio-opt"><input type="radio" name="pot_motivo" value="respuesta"> Falta respuesta del encargado</label>
+          <label class="radio-opt"><input type="radio" name="pot_motivo" value="precio"> Consigue mejor precio</label>
+          <label class="radio-opt"><input type="radio" name="pot_motivo" value="otro"> Otro</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Comentario adicional</label>
+        <textarea id="f_pot_comentario" placeholder="Contexto extra..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_potencial')">← Volver</button>
+      <button class="btn btn-primary" onclick="goSection('s_seccfinal')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_ACTIVO -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_activo">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Comentario cliente activo</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Código de cliente <span class="req">*</span></label>
+        <input type="text" id="f_activo_codigo" placeholder="Código en sistema">
+      </div>
+      <div class="field">
+        <label>¿Qué deberíamos tener en cuenta? <span class="req">*</span></label>
+        <textarea id="f_activo_comentario" placeholder="Describí la situación del cliente..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_activo')">← Volver</button>
+      <button class="btn btn-primary" onclick="goSection('s_seccfinal')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_RAZONSOCIAL -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_razonsocial">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Cambio de razón social</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Código de cliente <span class="req">*</span></label>
+        <input type="text" id="f_rs_codigo" placeholder="Código en sistema">
+      </div>
+      <div class="field">
+        <label>Nueva razón social <span class="req">*</span></label>
+        <input type="text" id="f_rs_nueva" placeholder="Tal cual aparece en ARCA/AFIP">
+      </div>
+      <div class="field">
+        <label>Tipo de contribuyente <span class="req">*</span></label>
+        <div class="radio-group" id="rg_rs_contribuyente">
+          <label class="radio-opt"><input type="radio" name="rs_contrib" value="monotributo"> Monotributo</label>
+          <label class="radio-opt"><input type="radio" name="rs_contrib" value="ri"> Responsable Inscripto</label>
+          <label class="radio-opt"><input type="radio" name="rs_contrib" value="cf"> Consumidor Final</label>
+          <label class="radio-opt"><input type="radio" name="rs_contrib" value="otro"> Otro</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>CUIT / DNI <span class="req">*</span><span class="hint">Monotributo o Resp. Inscripto → CUIT · Consumidor Final → DNI</span></label>
+        <input type="text" id="f_rs_cuit" placeholder="Ej: 20123456780">
+      </div>
+      <div class="field">
+        <label>Motivo del cambio <span class="req">*</span></label>
+        <div class="radio-group" id="rg_rs_motivo">
+          <label class="radio-opt"><input type="radio" name="rs_motivo" value="nuevo_local" onchange="toggleOtroRS()"> Compró un nuevo local</label>
+          <label class="radio-opt"><input type="radio" name="rs_motivo" value="impositivo" onchange="toggleOtroRS()"> Cuestión impositiva <span class="hint">Va a facturar con otro nombre/CUIT para no seguir acumulando impuestos con el anterior</span></label>
+          <label class="radio-opt"><input type="radio" name="rs_motivo" value="otro" onchange="toggleOtroRS()"> Otro</label>
+        </div>
+        <div class="field" id="f_rs_otro_wrap" style="display:none;margin-top:0.7rem;">
+          <label>Explicá el motivo <span class="req">*</span></label>
+          <input type="text" id="f_rs_otro" placeholder="Describí brevemente el motivo...">
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_razonsocial')">← Volver</button>
+      <button class="btn btn-primary" onclick="goSection('s_seccfinal')">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- S_SECCFINAL: Cierre genérico para no-alta -->
+  <!-- ============================================================ -->
+  <div class="section" id="s_seccfinal">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Comentarios y archivos</span>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Comentario extra (opcional)</label>
+        <textarea id="f_comentario_final" placeholder="Cualquier dato extra..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goBack('s_seccfinal')">← Volver</button>
+      <button class="btn btn-danger" onclick="submitForm()">✓ Enviar formulario</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SUCCESS -->
+  <!-- ============================================================ -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✅</div>
+    <h2>¡Formulario enviado!</h2>
+    <p>Los datos fueron registrados correctamente. Máximo 3 días hábiles para procesar el alta.</p>
+    <div class="summary-card" id="summaryCard"></div>
+    <br>
+    <button class="btn btn-primary" onclick="resetForm()">Nuevo formulario</button>
+  </div>
+
+</div><!-- end form-body -->
+
+<script>
+// ================================================================
+// STATE
+// ================================================================
+const state = {
+  objetivo: null,
+  canal: null,
+  offSubcanal: null,
+  onBase: null,
+  onClasificacion: null,
+  onFinalSubcanal: null,
+  history: []
+};
+
+// ================================================================
+// NAV
+// ================================================================
+function goSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (!state.history.includes(id)) state.history.push(id);
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function goNext(current) {
+
+  if (current === 's0') {
+    const vendedor = document.getElementById('f_vendedor').value;
+    if (!vendedor) {
+      showError('s0', 'Seleccioná tu nombre antes de continuar.');
+      return;
+    }
+    const obj = document.querySelector('input[name="objetivo"]:checked');
+    if (!obj) {
+      showError('s0', 'Seleccioná el objetivo del formulario.');
+      return;
+    }
+    clearError('s0');
+    state.objetivo = obj.value;
+    if (state.objetivo === 'alta') return goSection('s_alta1');
+    if (state.objetivo === 'baja') return goSection('s_baja');
+    if (state.objetivo === 'potencial') return goSection('s_potencial');
+    if (state.objetivo === 'activo') return goSection('s_activo');
+    if (state.objetivo === 'razonsocial') return goSection('s_razonsocial');
+  }
+
+  if (current === 's_alta1') {
+    const contrib = document.querySelector('input[name="contribuyente"]:checked');
+    const cuit = document.getElementById('f_cuit').value.trim();
+    const rs = document.getElementById('f_razonsocial').value.trim();
+    const loc = document.getElementById('f_localidad').value.trim();
+    const dom = document.getElementById('f_domicilio').value.trim();
+    if (!contrib) { showError('s_alta1', 'Seleccioná el tipo de contribuyente.'); return; }
+    if (!cuit)    { showError('s_alta1', 'Completá el CUIT o DNI.'); return; }
+    if (!rs)      { showError('s_alta1', 'Completá la razón social.'); return; }
+    if (!loc)     { showError('s_alta1', 'Completá la localidad.'); return; }
+    if (!dom)     { showError('s_alta1', 'Completá el domicilio.'); return; }
+    clearError('s_alta1');
+    return goSection('s_canal');
+  }
+
+  if (current === 's_canal') {
+    const c = document.querySelector('input[name="canal"]:checked');
+    if (!c) { showError('s_canal', 'Indicá si es canal ON o canal OFF.'); return; }
+    clearError('s_canal');
+    state.canal = c.value;
+    return goSection(state.canal === 'on' ? 's_on' : 's_off');
+  }
+
+  if (current === 's_off') {
+    if (!state.offSubcanal) { showError('s_off', 'Respondé todas las preguntas del árbol hasta que aparezca el subcanal detectado.'); return; }
+    clearError('s_off');
+    document.getElementById('f_subcanal').value = state.offSubcanal;
+    return goSection('s_visita');
+  }
+
+  if (current === 's_on') {
+    if (!state.onFinalSubcanal) { showError('s_on', 'Respondé todas las preguntas del árbol hasta que aparezca el subcanal detectado.'); return; }
+    clearError('s_on');
+    document.getElementById('f_subcanal').value = state.onFinalSubcanal;
+    return goSection('s_visita');
+  }
+
+  if (current === 's_visita') {
+    const dias = document.querySelectorAll('input[name="dias"]:checked');
+    if (dias.length === 0) { showError('s_visita', 'Seleccioná al menos un día de visita.'); return; }
+    clearError('s_visita');
+    return goSection('s_final');
+  }
+}
+
+function showError(sectionId, msg) {
+  let box = document.getElementById('err_' + sectionId);
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'err_' + sectionId;
+    box.style.cssText = 'background:#FEE2E2;border:1px solid #FECACA;border-radius:8px;padding:0.7rem 1rem;font-size:0.88rem;color:#991B1B;margin-bottom:1rem;display:flex;align-items:center;gap:8px;';
+    const sec = document.getElementById(sectionId);
+    const navBtn = sec.querySelector('.nav-buttons');
+    sec.insertBefore(box, navBtn);
+  }
+  box.innerHTML = '⚠️ ' + msg;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function clearError(sectionId) {
+  const box = document.getElementById('err_' + sectionId);
+  if (box) box.remove();
+}
+
+function goBack(current) {
+  const prev = {
+    's_alta1': 's0',
+    's_canal': 's_alta1',
+    's_off': 's_canal',
+    's_on': 's_canal',
+    's_visita': state.canal === 'on' ? 's_on' : 's_off',
+    's_final': 's_visita',
+    's_baja': 's0',
+    's_potencial': 's0',
+    's_activo': 's0',
+    's_razonsocial': 's0',
+    's_seccfinal': 's0'
+  };
+  if (prev[current]) goSection(prev[current]);
+}
+
+function updateProgress() {
+  const sections = ['s0','s_alta1','s_canal','s_off','s_on','s_visita','s_final'];
+  const active = document.querySelector('.section.active');
+  if (!active) return;
+  const idx = sections.indexOf(active.id);
+  const pct = idx < 0 ? 10 : Math.round(((idx+1)/sections.length)*100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ================================================================
+// HELPERS
+// ================================================================
+function showSubQ(id) { document.getElementById(id).classList.add('show'); }
+function hideSubQ(id) { document.getElementById(id).classList.remove('show'); }
+function hideAllAfter(ids) { ids.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('show'); }); }
+
+function setOffSubcanal(val) {
+  state.offSubcanal = val;
+  document.getElementById('off_subcanal_display').textContent = val;
+  document.getElementById('off_resultado').style.display = 'flex';
+  document.getElementById('btn_off_next').disabled = false;
+}
+
+function setOnFinalSubcanal(base, clas) {
+  state.onBase = base;
+  state.onClasificacion = clas || state.onClasificacion;
+  if (!state.onClasificacion) {
+    showSubQ('on_clasificacion');
+    return;
+  }
+  const c = state.onClasificacion;
+  let prefix = c === 'cadena' ? 'CADENA' : c === 'top' ? 'TOP' : c === 'base' ? 'BASE' : 'REG';
+  const final = prefix + ' - ' + base;
+  state.onFinalSubcanal = final;
+  document.getElementById('on_subcanal_display').textContent = final;
+  document.getElementById('on_resultado').style.display = 'flex';
+  document.getElementById('btn_on_next').disabled = false;
+}
+
+// ================================================================
+// ÁRBOL OFF
+// ================================================================
+function offStep1() {
+  const v = document.querySelector('input[name="comprador"]:checked')?.value;
+  hideAllAfter(['off_mayorista','off_esenciales','off_cereales','off_local','off_golosinas','off_bebidas','off_frescos','off_elaborados','off_medicamentos','off_resultado']);
+  state.offSubcanal = null;
+  document.getElementById('btn_off_next').disabled = true;
+  document.getElementById('off_resultado').style.display = 'none';
+  if (v === 'otros_y_cf') { showSubQ('off_mayorista'); }
+  else if (v === 'cf') { showSubQ('off_esenciales'); }
+}
+
+function offStepMayorista() {
+  const v = document.querySelector('input[name="salon"]:checked')?.value;
+  if (v === 'si') setOffSubcanal('MAYORISTA SALÓN');
+  else if (v === 'no') setOffSubcanal('MAYORISTA DEPÓSITO');
+}
+
+function offStep2b() {
+  const v = document.querySelector('input[name="esenciales"]:checked')?.value;
+  hideAllAfter(['off_cereales','off_local','off_golosinas','off_bebidas','off_frescos','off_elaborados','off_medicamentos']);
+  if (v === 'si') showSubQ('off_cereales');
+  else if (v === 'no') showSubQ('off_golosinas');
+}
+
+function offStep3() {
+  const v = document.querySelector('input[name="cereales"]:checked')?.value;
+  if (v === 'si') setOffSubcanal('DIETÉTICA');
+  else showSubQ('off_local');
+}
+
+function offStep4() {
+  const v = document.querySelector('input[name="ingreso"]:checked')?.value;
+  hideAllAfter(['off_local_tipo']);
+  if (v === 'no') setOffSubcanal('ALMACÉN VENTANA');
+  else showSubQ('off_local_tipo');
+}
+
+function offSetSubcanalLocal() {
+  const v = document.querySelector('input[name="tipolocal"]:checked')?.value;
+  const map = { almacen: 'ALMACÉN', almacen_autoservice: 'ALMACÉN AUTOSERVICIO', autoservice: 'AUTOSERVICIO', almacen_autoservice_virtual: 'ALMACÉN AUTOSERVICIO' };
+  if (map[v]) setOffSubcanal(map[v]);
+}
+
+function offStep5() {
+  const v = document.querySelector('input[name="golosinas"]:checked')?.value;
+  hideAllAfter(['off_golosinas_tipo','off_kiosco_tipo','off_bebidas','off_frescos','off_elaborados','off_medicamentos']);
+  if (v === 'si') showSubQ('off_golosinas_tipo');
+  else { showSubQ('off_bebidas'); }
+}
+
+function offSetSubcanalGolosinas() {
+  const v = document.querySelector('input[name="tipogolosinas"]:checked')?.value;
+  hideAllAfter(['off_kiosco_tipo']);
+  if (v === 'estacion_servicio') setOffSubcanal('ESTACIÓN DE SERVICIO');
+  else showSubQ('off_kiosco_tipo');
+}
+
+function offSetSubcanalKiosco() {
+  const v = document.querySelector('input[name="kioscoingreso"]:checked')?.value;
+  if (v === 'si') setOffSubcanal('KIOSCO/MAXIKIOSCO');
+  else setOffSubcanal('KIOSCO VENTANA');
+}
+
+function offStep6() {
+  const v = document.querySelector('input[name="bebidas"]:checked')?.value;
+  hideAllAfter(['off_bebidas_tipo','off_frescos','off_elaborados','off_medicamentos']);
+  if (v === 'si') showSubQ('off_bebidas_tipo');
+  else showSubQ('off_frescos');
+}
+
+function offSetSubcanalBebidas() {
+  const v = document.querySelector('input[name="tipobebidas"]:checked')?.value;
+  const map = { vinoteca: 'VINOTECA', tienda_bebidas: 'TIENDA DE BEBIDAS', deposito_tienda_virtual: 'DEPÓSITO TIENDA VIRTUAL' };
+  if (map[v]) setOffSubcanal(map[v]);
+}
+
+function offStep7() {
+  const v = document.querySelector('input[name="frescos"]:checked')?.value;
+  hideAllAfter(['off_frescos_tipo','off_elaborados','off_medicamentos']);
+  if (v === 'si') showSubQ('off_frescos_tipo');
+  else showSubQ('off_elaborados');
+}
+
+function offSetSubcanalFrescos() {
+  const v = document.querySelector('input[name="tipofrescos"]:checked')?.value;
+  const map = { verduleria: 'VERDULERÍA', carniceria: 'CARNICERÍA/POLLERÍA', pescaderia: 'PESCADERÍA', fiambreria: 'FIAMBRERÍA/QUESERÍA', casa_pastas: 'CASA DE PASTAS' };
+  if (map[v]) setOffSubcanal(map[v]);
+}
+
+function offStep8() {
+  const v = document.querySelector('input[name="elaborados"]:checked')?.value;
+  hideAllAfter(['off_elaborados_tipo','off_medicamentos']);
+  if (v === 'si') showSubQ('off_elaborados_tipo');
+  else showSubQ('off_medicamentos');
+}
+
+function offSetSubcanalElaborados() {
+  const v = document.querySelector('input[name="tipoelaborados"]:checked')?.value;
+  if (v === 'rotiseria') setOffSubcanal('ROTISERÍA/COMIDA PARA LLEVAR');
+  else if (v === 'panaderia') setOffSubcanal('PANADERÍA/PASTELERÍA');
+}
+
+function offSetSubcanalMedicamentos(val) { setOffSubcanal(val); }
+
+function offStep9noMatch() {
+  setOffSubcanal('SIN CLASIFICAR - Revisar con administración');
+}
+
+// ================================================================
+// ÁRBOL ON — lógica exacta del árbol de decisión
+// ================================================================
+
+const ON_IDS = ['on_p_mayorista','on_p_baile','on_p_bar','on_p_gastro',
+  'on_p_pizza','on_p_hambur','on_p_cafe','on_p_rest','on_p_alpaso',
+  'on_p_cadglobal','on_p_cadlocal',
+  'on_p_actividad','on_p_deporte','on_p_hotel','on_p_casino','on_p_edu',
+  'on_p_eventos','on_p_cultural','on_p_shopping','on_p_transporte','on_p_estserv','on_p_clasif'];
+
+function onHideAll() {
+  ON_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('show');
+    el.querySelectorAll('input[type=radio]').forEach(r => {
+      r.checked = false;
+      const opt = r.closest('.radio-opt');
+      if (opt) opt.classList.remove('selected');
+    });
+  });
+  state.onFinalSubcanal = null;
+  state.onBase = null;
+  document.getElementById('on_resultado').style.display = 'none';
+  document.getElementById('btn_on_next').disabled = true;
+  const td = document.getElementById('on_tipo_display');
+  if (td) td.textContent = '—';
+  // Ocultar avisos
+  ['on_aviso_nocturno','on_aviso_gastro'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function onHideFrom(fromId) {
+  const idx = ON_IDS.indexOf(fromId);
+  if (idx < 0) return;
+  ON_IDS.slice(idx).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('show');
+    el.querySelectorAll('input[type=radio]').forEach(r => {
+      r.checked = false;
+      const opt = r.closest('.radio-opt');
+      if (opt) opt.classList.remove('selected');
+    });
+  });
+  state.onFinalSubcanal = null;
+  state.onBase = null;
+  document.getElementById('on_resultado').style.display = 'none';
+  document.getElementById('btn_on_next').disabled = true;
+  // Ocultar avisos que dependan de lo que sigue
+  const avisoGastro = document.getElementById('on_aviso_gastro');
+  if (avisoGastro && ON_IDS.indexOf('on_p_cadlocal') >= idx) avisoGastro.style.display = 'none';
+}
+
+function onShow(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.add('show');
+    setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+  }
+  // Mostrar aviso si llegan al final de la rama nocturna sin match
+  if (id === 'on_p_bar') {
+    setTimeout(() => {
+      const aviso = document.getElementById('on_aviso_nocturno');
+      if (aviso) aviso.style.display = 'block';
+    }, 300);
+  }
+}
+
+function onSetBase(tipo) {
+  // Si el tipo cambió, limpiar clasificación y resultado
+  if (state.onBase !== tipo) {
+    state.onBase = tipo;
+    state.onFinalSubcanal = null;
+    // Limpiar solo la clasificación
+    const clasifEl = document.getElementById('on_p_clasif');
+    if (clasifEl) {
+      clasifEl.querySelectorAll('input[type=radio]').forEach(r => {
+        r.checked = false;
+        const opt = r.closest('.radio-opt');
+        if (opt) opt.classList.remove('selected');
+      });
+    }
+    document.getElementById('on_resultado').style.display = 'none';
+    document.getElementById('btn_on_next').disabled = true;
+  } else {
+    state.onBase = tipo;
+  }
+  const td = document.getElementById('on_tipo_display');
+  if (td) td.textContent = tipo;
+  onShow('on_p_clasif');
+}
+
+function onFinalizar(tipo, clasif) {
+  const map = { cadena:'CADENA', top:'TOP', base:'BASE', reg:'REG' };
+  const prefix = map[clasif] || 'REG';
+  state.onFinalSubcanal = prefix + ' - ' + tipo;
+  const disp = document.getElementById('on_subcanal_display');
+  if (disp) disp.textContent = state.onFinalSubcanal;
+  const res = document.getElementById('on_resultado');
+  if (res) { res.style.display = 'flex'; res.style.alignItems = 'center'; res.style.gap = '12px'; }
+  const btn = document.getElementById('btn_on_next');
+  if (btn) btn.disabled = false;
+}
+
+// P1: Nocturno — PRIMERA PREGUNTA
+function on_nocturno() {
+  const v = document.querySelector('input[name="on_nocturno"]:checked')?.value;
+  onHideFrom('on_p_mayorista');
+  // Ocultar aviso de rama nocturna
+  const aviso = document.getElementById('on_aviso_nocturno');
+  if (aviso) aviso.style.display = 'none';
+  if (v === 'si') onShow('on_p_baile');
+  else if (v === 'no') onShow('on_p_gastro');
+}
+
+// P2: Baile/música → BOLICHE (si=sí) o → BAR (si=no)
+function on_baile() {
+  const v = document.querySelector('input[name="on_baile"]:checked')?.value;
+  onHideFrom('on_p_bar');
+  if (v === 'si') onSetBase('BOLICHE');
+  else onShow('on_p_bar');
+}
+
+// P3: Bar → BAR. Si no es bar, mostrar aviso para volver a nocturno
+function on_bar() {
+  const v = document.querySelector('input[name="on_bar"]:checked')?.value;
+  onHideFrom('on_p_clasif');
+  if (v === 'si') {
+    document.getElementById('on_aviso_nocturno').style.display = 'none';
+    onSetBase('BAR');
+  }
+}
+
+// Mostrar aviso cuando se carga la sección bar sin selección
+function on_mostrar_aviso_bar() {
+  const aviso = document.getElementById('on_aviso_nocturno');
+  if (aviso) aviso.style.display = 'block';
+}
+
+// P4: Gastronomía
+function on_gastro() {
+  const v = document.querySelector('input[name="on_gastro"]:checked')?.value;
+  onHideFrom('on_p_pizza');
+  if (v === 'si') onShow('on_p_pizza');
+  else onShow('on_p_actividad');
+}
+
+// P5: Pizza
+function on_pizza() {
+  const v = document.querySelector('input[name="on_pizza"]:checked')?.value;
+  onHideFrom('on_p_hambur');
+  if (v === 'si') onSetBase('PIZZERÍA');
+  else onShow('on_p_hambur');
+}
+
+// P6: Hamburguesería
+function on_hambur() {
+  const v = document.querySelector('input[name="on_hambur"]:checked')?.value;
+  onHideFrom('on_p_cafe');
+  if (v === 'si') onSetBase('HAMBURGUESERÍA');
+  else onShow('on_p_cafe');
+}
+
+// P7: Café
+function on_cafe() {
+  const v = document.querySelector('input[name="on_cafe"]:checked')?.value;
+  onHideFrom('on_p_rest');
+  if (v === 'si') onSetBase('CAFÉ/CONFITERÍA');
+  else onShow('on_p_rest');
+}
+
+// P8: Restaurante → SI=RESTAURANTE, NO→ preguntar al paso
+function on_rest() {
+  const v = document.querySelector('input[name="on_rest"]:checked')?.value;
+  onHideFrom('on_p_alpaso');
+  if (v === 'si') onSetBase('RESTAURANTE');
+  else onShow('on_p_alpaso');
+}
+
+// P8b: Al paso → SI=OTROS MEALS, NO→ cadena global
+function on_alpaso() {
+  const v = document.querySelector('input[name="on_alpaso"]:checked')?.value;
+  onHideFrom('on_p_cadglobal');
+  const aviso = document.getElementById('on_aviso_gastro');
+  if (aviso) aviso.style.display = 'none';
+  if (v === 'si') onSetBase('OTROS MEALS');
+  else onShow('on_p_cadglobal');
+}
+
+// Cadena global → SI=CADENA GLOBAL (sin top/base/reg), NO→ cadena local
+function on_cadglobal() {
+  const v = document.querySelector('input[name="on_cadglobal"]:checked')?.value;
+  onHideFrom('on_p_cadlocal');
+  if (v === 'si') {
+    state.onFinalSubcanal = 'CADENA GLOBAL';
+    document.getElementById('on_subcanal_display').textContent = 'CADENA GLOBAL';
+    document.getElementById('on_resultado').style.display = 'flex';
+    document.getElementById('btn_on_next').disabled = false;
+    state.onBase = 'CADENA GLOBAL';
+  } else onShow('on_p_cadlocal');
+}
+
+// Cadena local → SI=CADENA LOCAL (sin clasif), NO→ OTROS MEALS con clasif + cartel
+function on_cadlocal() {
+  const v = document.querySelector('input[name="on_cadlocal"]:checked')?.value;
+  onHideFrom('on_p_clasif');
+  if (v === 'si') {
+    state.onFinalSubcanal = 'CADENA LOCAL';
+    document.getElementById('on_subcanal_display').textContent = 'CADENA LOCAL';
+    document.getElementById('on_resultado').style.display = 'flex';
+    document.getElementById('btn_on_next').disabled = false;
+    state.onBase = 'CADENA LOCAL';
+  } else {
+    // OTROS MEALS → pedir clasificación + mostrar cartel
+    onSetBase('OTROS MEALS');
+    const aviso = document.getElementById('on_aviso_gastro');
+    if (aviso) aviso.style.display = 'block';
+  }
+}
+
+// P9: Actividad principal
+function on_actividad() {
+  const v = document.querySelector('input[name="on_actividad"]:checked')?.value;
+  onHideFrom('on_p_deporte');
+  if (v === 'si') onShow('on_p_deporte');
+  else onShow('on_p_estserv');
+}
+
+// P10: Deporte
+function on_deporte() {
+  const v = document.querySelector('input[name="on_deporte"]:checked')?.value;
+  onHideFrom('on_p_hotel');
+  if (v === 'si') onSetBase('DEPORTE');
+  else onShow('on_p_hotel');
+}
+
+// P11: Hotel
+function on_hotel() {
+  const v = document.querySelector('input[name="on_hotel"]:checked')?.value;
+  onHideFrom('on_p_casino');
+  if (v === 'si') onSetBase('HOTEL');
+  else onShow('on_p_casino');
+}
+
+// P12: Casino (antes que educación)
+function on_casino() {
+  const v = document.querySelector('input[name="on_casino"]:checked')?.value;
+  onHideFrom('on_p_edu');
+  if (v === 'si') onSetBase('CASINO/JUEGOS');
+  else onShow('on_p_edu');
+}
+
+// P13: Educación
+function on_edu() {
+  const v = document.querySelector('input[name="on_edu"]:checked')?.value;
+  onHideFrom('on_p_eventos');
+  if (v === 'si') onSetBase('EDUCACIÓN');
+  else onShow('on_p_eventos');
+}
+
+// P14: Eventos (antes que cultural)
+function on_eventos() {
+  const v = document.querySelector('input[name="on_eventos"]:checked')?.value;
+  onHideFrom('on_p_cultural');
+  if (v === 'si') onSetBase('EVENTOS');
+  else onShow('on_p_cultural');
+}
+
+// P15: Cultural → NO = shopping
+function on_cultural() {
+  const v = document.querySelector('input[name="on_cultural"]:checked')?.value;
+  onHideFrom('on_p_shopping');
+  if (v === 'si') onSetBase('OTROS ENTRETENIMIENTOS');
+  else onShow('on_p_shopping');
+}
+
+// P16: Shopping → SI=CADENA SHOPPING directo (sin clasif), NO→ transporte
+function on_shopping() {
+  const v = document.querySelector('input[name="on_shopping"]:checked')?.value;
+  onHideFrom('on_p_transporte');
+  if (v === 'si') {
+    state.onFinalSubcanal = 'CADENA SHOPPING';
+    document.getElementById('on_subcanal_display').textContent = 'CADENA SHOPPING';
+    document.getElementById('on_resultado').style.display = 'flex';
+    document.getElementById('btn_on_next').disabled = false;
+    state.onBase = 'CADENA SHOPPING';
+  } else onShow('on_p_transporte');
+}
+
+// P17: Transporte → SI=CADENA TRANSPORTE directo (sin clasif), NO→ estserv
+function on_transporte() {
+  const v = document.querySelector('input[name="on_transporte"]:checked')?.value;
+  onHideFrom('on_p_estserv');
+  if (v === 'si') {
+    state.onFinalSubcanal = 'CADENA TRANSPORTE';
+    document.getElementById('on_subcanal_display').textContent = 'CADENA TRANSPORTE';
+    document.getElementById('on_resultado').style.display = 'flex';
+    document.getElementById('btn_on_next').disabled = false;
+    state.onBase = 'CADENA TRANSPORTE';
+  } else onShow('on_p_estserv');
+}
+
+// P18: Estación de servicio ON → SI=EST.SERV, NO→ Mayorista ON
+function on_estserv() {
+  const v = document.querySelector('input[name="on_estserv"]:checked')?.value;
+  onHideFrom('on_p_mayorista');
+  if (v === 'si') onSetBase('ESTACIÓN DE SERVICIO ON');
+  else onShow('on_p_mayorista');
+}
+
+// Mayorista ON → SI=MAYORISTA ON directo (sin clasif), NO=OTROS ENTRETENIMIENTOS
+function on_mayorista() {
+  const v = document.querySelector('input[name="on_mayorista"]:checked')?.value;
+  onHideFrom('on_p_clasif');
+  if (v === 'si') {
+    state.onFinalSubcanal = 'MAYORISTA ON';
+    document.getElementById('on_subcanal_display').textContent = 'MAYORISTA ON';
+    document.getElementById('on_resultado').style.display = 'flex';
+    document.getElementById('btn_on_next').disabled = false;
+    state.onBase = 'MAYORISTA ON';
+  } else {
+    onSetBase('OTROS ENTRETENIMIENTOS');
+  }
+}
+
+// Clasificación final TOP/REG/BASE/CADENA
+function on_clasif() {
+  const v = document.querySelector('input[name="on_clasif"]:checked')?.value;
+  if (v && state.onBase) onFinalizar(state.onBase, v);
+}
+
+// ================================================================
+// RADIO / CHECKBOX styling
+// ================================================================
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'radio') {
+    const name = e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.closest('.radio-opt')?.classList.remove('selected');
+    });
+    e.target.closest('.radio-opt')?.classList.add('selected');
+  }
+  if (e.target.type === 'checkbox') {
+    e.target.closest('.check-opt')?.classList.toggle('selected', e.target.checked);
+  }
+});
+
+// ================================================================
+// CONFIGURACIÓN — PEGÁ TU URL DE APPS SCRIPT ACÁ
+// ================================================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYB_ZHQmjX-eVT3ozzTKIhbWYCjR6VnecYBqU9qjB9wWMHlRfYxv_iGQ7ba8m_Dxq-/exec";
+
+// ================================================================
+// SUBMIT
+// ================================================================
+function submitForm() {
+  const vendedor = document.getElementById('f_vendedor').value;
+  if (!vendedor) { alert('Por favor seleccioná el nombre del vendedor.'); return; }
+
+  // Recolectar todos los datos del formulario
+  const diasChecked = [...document.querySelectorAll('input[name="dias"]:checked')].map(c => c.value);
+
+  const datos = {
+    vendedor:          vendedor,
+    objetivo:          state.objetivo || "",
+    contacto:          document.getElementById('f_contacto')?.value || "",
+    horario:           document.getElementById('f_horario')?.value || "",
+    alcohol:           document.querySelector('input[name="alcohol"]:checked')?.value || "",
+    segundavuelta:     document.querySelector('input[name="segundavuelta"]:checked')?.value || "",
+    // Alta
+    excliente:         document.querySelector('input[name="excliente"]:checked')?.value || "",
+    contribuyente:     document.querySelector('input[name="contribuyente"]:checked')?.value || "",
+    cuit:              document.getElementById('f_cuit')?.value || "",
+    razonsocial:       document.getElementById('f_razonsocial')?.value || "",
+    fantasia:          document.getElementById('f_fantasia')?.value || "",
+    localidad:         document.getElementById('f_localidad')?.value || "",
+    domicilio:         document.getElementById('f_domicilio')?.value || "",
+    canal:             state.canal || "",
+    subcanal:          document.getElementById('f_subcanal')?.value || "",
+    subcanal_cliente:  document.getElementById('f_subcanal_cliente')?.value || "",
+    dias_visita:       diasChecked.join(", "),
+    comentario:        document.getElementById('f_comentario_alta')?.value || document.getElementById('f_comentario_final')?.value || "",
+    // Baja
+    baja_codigo:       document.getElementById('f_baja_codigo')?.value || "",
+    baja_motivo:       document.getElementById('f_baja_motivo')?.value || "",
+    // Potencial
+    pot_nombre:        document.getElementById('f_pot_nombre')?.value || "",
+    pot_motivo:        document.querySelector('input[name="pot_motivo"]:checked')?.value || "",
+    // Activo
+    activo_codigo:     document.getElementById('f_activo_codigo')?.value || "",
+    activo_comentario: document.getElementById('f_activo_comentario')?.value || "",
+    // Razón social
+    rs_codigo:         document.getElementById('f_rs_codigo')?.value || "",
+    rs_nueva:          document.getElementById('f_rs_nueva')?.value || "",
+    rs_contribuyente:  document.querySelector('input[name="rs_contrib"]:checked')?.value || "",
+    rs_cuit:           document.getElementById('f_rs_cuit')?.value || "",
+  };
+
+  // Armar resumen visual
+  let summary = `<strong>Vendedor</strong><span>${datos.vendedor}</span>`;
+  summary += `<strong>Objetivo</strong><span>${datos.objetivo.toUpperCase()}</span>`;
+  if (state.objetivo === 'alta') {
+    summary += `<strong>Canal</strong><span>${(datos.canal || '—').toUpperCase()}</span>`;
+    summary += `<strong>Razón social</strong><span>${datos.razonsocial || '—'}</span>`;
+    summary += `<strong>Localidad</strong><span>${datos.localidad || '—'}</span>`;
+    summary += `<strong>Subcanal</strong><span>${datos.subcanal || '—'}</span>`;
+  }
+
+  // Mostrar pantalla de éxito inmediatamente
+  document.getElementById('summaryCard').innerHTML = summary;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('progressFill').style.width = '100%';
+  window.scrollTo(0,0);
+
+  // Enviar a Google Sheets (si la URL está configurada)
+  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "PEGAR_URL_AQUI") {
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos)
+    }).catch(err => console.warn("Error al enviar a Sheets:", err));
+  } else {
+    console.warn("⚠️ URL de Apps Script no configurada. Los datos no se guardaron en Sheets.");
+  }
+}
+
+function toggleOtroRS() {
+  const v = document.querySelector('input[name="rs_motivo"]:checked')?.value;
+  const wrap = document.getElementById('f_rs_otro_wrap');
+  if (wrap) wrap.style.display = v === 'otro' ? 'block' : 'none';
+}
+
+function resetForm() {
+  location.reload();
+}
+</script>
+</body>
+</html>
